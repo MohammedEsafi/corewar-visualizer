@@ -1,46 +1,39 @@
 #include <stdio.h>
 #include <GL/glut.h>
-#include <math.h>
-#define pi 3.142857
+#include <GL/freeglut.h>
 
-// function to initialize
-void Init(void)
+void initGL(void)
 {
-	// making background color black as first
-	// 3 arguments all are 0.0
 	glClearColor(0.0, 0.0, 0.0, 1.0);
+	// glColor3f(0.0, 1.0, 0.0);
+	// glMatrixMode(GL_PROJECTION);
+	// glLoadIdentity();
+	// gluOrtho2D(-780, 780, -420, 420);
+}
 
-	// making picture color green (in RGB mode), as middle argument is 1.0
-	glColor3f(0.0, 1.0, 0.0);
+void rectangle(int x1, int y1, int x2, int y2)
+{
+	glBegin(GL_QUADS);
+	glColor3f(0, 1, 0);
+	glVertex2f(x1, y1);
+	glVertex2f(x2, y1);
+	glVertex2f(x2, y2);
+	glVertex2f(x1, y2);
 
-	// breadth of picture boundary is 1 pixel
-	glPointSize(1.0);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	// setting window dimension in X- and Y- direction
-	gluOrtho2D(-780, 780, -420, 420);
+	glColor3f(0, 1, 0);
+	glVertex2f(x1, y1);
+	glVertex2f(-1 * x2, y1);
+	glVertex2f(x2 * -1, y2 * -1);
+	glVertex2f(x1, y2 * -1);
+	// glRasterPos2f(0, 0);
+	// glutBitmapString(GLUT_BITMAP_8_BY_13, "sasdsadasdasdass");
+	glEnd();
 }
 
 void drawing(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	glBegin(GL_POINTS);
-	float x, y, i;
-
-	// iterate y up to 2*pi, i.e., 360 degree
-	// with small increment in angle as
-	// glVertex2i just draws a point on specified co-ordinate
-	for (i = 0; i < (2 * pi); i += 0.001)
-	{
-		// let 200 is radius of circle and as,
-		// circle is defined as x=r*cos(i) and y=r*sin(i)
-		x = 200 * cos(i);
-		y = 200 * sin(i);
-
-		glVertex2i(x, y);
-	}
-	glEnd();
+	rectangle(0, 0, 4, 4);
 	glFlush();
 }
 
@@ -51,8 +44,8 @@ int main(int argc, char **argv)
 	glutInitWindowSize(1366, 768);
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("CoreWar");
-	Init();
-
+	initGL();
 	glutDisplayFunc(drawing);
 	glutMainLoop();
+	return (0);
 }
