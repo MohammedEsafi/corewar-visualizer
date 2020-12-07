@@ -8,7 +8,7 @@ void initGL(void)
 	// glColor3f(0.0, 1.0, 0.0);
 	// glMatrixMode(GL_PROJECTION);
 	// glLoadIdentity();
-	// gluOrtho2D(-780, 780, -420, 420);
+	gluOrtho2D(-683, 683, -384, 384);
 }
 
 void rectangle(int x1, int y1, int x2, int y2)
@@ -20,11 +20,11 @@ void rectangle(int x1, int y1, int x2, int y2)
 	glVertex2f(x2, y2);
 	glVertex2f(x1, y2);
 
-	glColor3f(0, 1, 0);
-	glVertex2f(x1, y1);
-	glVertex2f(-1 * x2, y1);
-	glVertex2f(x2 * -1, y2 * -1);
-	glVertex2f(x1, y2 * -1);
+	// glColor3f(0, 1, 0);
+	// glVertex2f(x1, y1);
+	// glVertex2f(-1 * x2, y1);
+	// glVertex2f(x2 * -1, y2 * -1);
+	// glVertex2f(x1, y2 * -1);
 	// glRasterPos2f(0, 0);
 	// glutBitmapString(GLUT_BITMAP_8_BY_13, "sasdsadasdasdass");
 	glEnd();
@@ -33,7 +33,7 @@ void rectangle(int x1, int y1, int x2, int y2)
 void drawing(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	rectangle(0, 0, 4, 4);
+	rectangle(0, 0, 683, 384);
 	glFlush();
 }
 
