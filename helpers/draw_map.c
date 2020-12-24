@@ -1,22 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   renderBitmapString.c                               :+:      :+:    :+:   */
+/*   draw_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mesafi <mesafi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/17 18:49:41 by mesafi            #+#    #+#             */
-/*   Updated: 2020/12/17 18:49:46 by mesafi           ###   ########.fr       */
+/*   Created: 2020/12/23 09:33:39 by mesafi            #+#    #+#             */
+/*   Updated: 2020/12/23 09:33:41 by mesafi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <visualizer.h>
 
-void	renderBitmapString(float x, float y, char *str) {
+void	draw_map()
+{
 	int		i;
+	int		x;
+	int		y;
 
-	glRasterPos2f(x, y);
 	i = -1;
-	while (str[++i])
-		glutBitmapCharacter(GLUT_STROKE_ROMAN, str[i]);
+	while (++i < MEM_SIZE)
+	{
+		x = (i % 64);
+		y = (i / 64);
+		x = x + (13 * x) - SIDE;
+		y = y - (15 * y) + SIDE;
+		rectangle(x, y, x + 13, y - 13);
+	}
 }

@@ -18,13 +18,17 @@
 
 # Standard variables
 NAME		= visualizer.a
+HEADER		= visualizer.h
 
-OBJS		= helpers/rectangle.o \
+OBJS		= visualizer.o \
+				helpers/draw_map.o \
+				helpers/rectangle.o \
 				helpers/renderBitmapString.o
+			
 
 CC			= gcc
 
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -I . -Wno-deprecated
 
 # Colors
 BLACK		= \033[30m
@@ -45,7 +49,7 @@ build:
 		echo "⇾ building $(NAME)..." ; \
 	fi;
 
-$(NAME): $(OBJS) libft.h
+$(NAME): $(OBJS) $(HEADER)
 	@ar rc $(NAME) $(OBJS)
 	@ranlib $(NAME)
 	@echo "⇾ $(NAME) $(GREEN)done ( ˆᴗˆ )$(RESET)"
