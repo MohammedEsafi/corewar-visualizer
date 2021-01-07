@@ -12,49 +12,61 @@
 
 #include <visualizer.h>
 
-// To-do: declaration global pointer on queue data from corwar 
+t_deque		*datum = NULL;
+t_dlist		*node = NULL;
 
-void		initGL(void)
+static void		initGL(void)
 {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
-	gluOrtho2D(-SIDE, SIDE, -SIDE, SIDE);
+	gluOrtho2D(-WIDTH / 2, WIDTH / 2, -HEIGHT / 2, HEIGHT / 2);
 }
 
-void		drawing(void)
+void			display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	draw_map();
+	draw_map(node);
 	glFlush();
 }
 
-void		keyboard(unsigned char key, int x, int y)
+static void		keyboard(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
 		case 27:
 			exit(0);
-			break;
+			break ;
 
 		default:
-			break;
+			break ;
 	}
 }
 
-void		*visualizer(void *queue)
+static void		timer(int data)
+{
+	if (!(node = node->next))
+		return ;
+	glutPostRedisplay();
+	glutTimerFunc(1, timer, 0);
+}
+
+void			visualizer(t_deque *deque)
 {
 	int		argc;
 	char	*argv;
 
 	argc = 0;
-	// To-do: init global variable
+	datum = (t_deque *)deque;
+	while (datum->front == NULL)
+		;
+	node = datum->front;
 	glutInit(&argc, &argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(WIDTH, HEIGHT);
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("CoreWar");
 	initGL();
-	glutDisplayFunc(drawing);
+	glutDisplayFunc(display);
+	glutTimerFunc(1, timer, 0);
 	glutKeyboardFunc(keyboard);
 	glutMainLoop();
-	return (NULL);
 }
