@@ -46,7 +46,6 @@ static void		timer(int data)
 	if (!(node = node->next))
 		return ;
 	glutPostRedisplay();
-	printf("kj\n");
 	glutTimerFunc(0, timer, 0);
 }
 
@@ -67,7 +66,7 @@ void			visualizer(t_deque *deque)
 	glutCreateWindow("CoreWar");
 	initGL();
 	glutDisplayFunc(display);
-	glutTimerFunc(0, timer, 0);
 	glutKeyboardFunc(keyboard);
+	glutTimerFunc(0, timer, 0);
 	glutMainLoop();
 }
