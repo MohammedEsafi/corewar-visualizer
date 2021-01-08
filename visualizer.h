@@ -19,8 +19,8 @@
 # define VISUALIZER_H
 
 # define MEM_SIZE 4096
-# define WIDTH 1400
-# define HEIGHT 910 
+# define WIDTH 1793
+# define HEIGHT 720 
 # define NEW 6
 # define OLD 5
 
