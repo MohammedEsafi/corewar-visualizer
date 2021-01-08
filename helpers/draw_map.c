@@ -28,10 +28,10 @@ static void	filler(t_kit *kit, char cursor[128][32], int *processesAlive)
 
 static int	getBackground(char cursor, int playerId)
 {
+	// if (cursor == OLD)
+	// 	return (OLD);
 	if (cursor == NEW)
 		return (NEW);
-	if (cursor == OLD)
-		return (OLD);
 	else
 		return (playerId);
 }
