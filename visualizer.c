@@ -14,6 +14,7 @@
 
 t_deque		*datum = NULL;
 t_dlist		*node = NULL;
+static int	carry = 1;
 
 static void		initGL(void)
 {
@@ -24,29 +25,56 @@ static void		initGL(void)
 void			display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	draw_map(node);
+	drawing(node);
 	glFlush();
 }
 
-static void		keyboard(unsigned char key, int x, int y)
+static void		goNext()
+{
+	carry = 0;
+	if (!(node = node->next))
+		return ;
+	glutPostRedisplay();
+}
+
+static void		goPrevious()
+{
+	carry = 0;
+	if (!(node = node->prev))
+		return ;
+	glutPostRedisplay();
+}
+
+static void		timer(int data)
+{
+	if (!carry || !(node = node->next))
+		return ;
+	glutPostRedisplay();
+	glutTimerFunc(0, timer, 0);
+}
+
+static void		specialInput(int key, int x, int y)
 {
 	switch (key)
 	{
 		case 27:
 			exit(0);
 			break ;
-
+		case 32:
+			carry = 1;
+			glutTimerFunc(0, timer, 0);
+			break ;
+		case GLUT_KEY_UP:
+		case GLUT_KEY_RIGHT:
+			goNext();
+			break ;
+		case GLUT_KEY_DOWN:
+		case GLUT_KEY_LEFT:
+			goPrevious();
+			break ;
 		default:
 			break ;
 	}
-}
-
-static void		timer(int data)
-{
-	if (!(node = node->next))
-		return ;
-	glutPostRedisplay();
-	glutTimerFunc(0, timer, 0);
 }
 
 void			visualizer(t_deque *deque)
@@ -66,7 +94,6 @@ void			visualizer(t_deque *deque)
 	glutCreateWindow("CoreWar");
 	initGL();
 	glutDisplayFunc(display);
-	glutKeyboardFunc(keyboard);
-	glutTimerFunc(0, timer, 0);
+	glutSpecialFunc(specialInput);
 	glutMainLoop();
 }

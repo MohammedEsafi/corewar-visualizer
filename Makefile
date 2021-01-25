@@ -21,7 +21,7 @@ NAME		= visualizer.a
 HEADER		= visualizer.h
 
 OBJS		= visualizer.o \
-				helpers/draw_map.o \
+				helpers/drawing.o \
 				helpers/rectangle.o \
 				helpers/renderBitmapString.o
 			

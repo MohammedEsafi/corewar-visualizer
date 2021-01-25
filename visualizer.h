@@ -20,9 +20,7 @@
 
 # define MEM_SIZE 4096
 # define WIDTH 1793
-# define HEIGHT 720 
-# define NEW 6
-# define OLD 5
+# define HEIGHT 1282
 
 /*
  ** Includes
@@ -40,7 +38,7 @@
 */
 
 void	visualizer(t_deque *deque);
-void	draw_map(t_dlist *node);
+void	drawing(t_dlist *node);
 void	rectangle(int x1, int y1, int x2, int y2, int background);
 void	renderBitmapString(float x, float y, char *str, int foreground);
 

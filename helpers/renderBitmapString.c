@@ -26,5 +26,5 @@ void	renderBitmapString(float x, float y, char *str, int foreground) {
 	glRasterPos2f(x, y);
 	i = -1;
 	while (str[++i])
-		glutBitmapCharacter(GLUT_BITMAP_8_BY_13, str[i]);
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
 }
