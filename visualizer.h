@@ -40,6 +40,6 @@
 void	visualizer(t_deque *deque);
 void	drawing(t_dlist *node);
 void	rectangle(int x1, int y1, int x2, int y2, int background);
-void	renderBitmapString(float x, float y, char *str, int foreground);
+void	renderBitmapString(float x, float y, char *str);
 
 #endif

@@ -37,14 +37,6 @@ static int	getBackground(char cursor, int playerId)
 		return (playerId);
 }
 
-static int	getForeground(char cursor, int playerId)
-{
-	// if (cursor == newCursor || cursor == oldCursor)
-	// 	return (playerId);
-	// else
-		return (0);
-}
-
 void		drawing(t_dlist *node)
 {
 	int		i;
@@ -55,7 +47,6 @@ void		drawing(t_dlist *node)
 	char	cursor[64][64] = {0};
 	int		processesAlive = 0;
 	int		background;
-	int		foreground;
 
 	kit = (t_kit *)(node->content);
 	i = -1;
@@ -65,7 +56,6 @@ void		drawing(t_dlist *node)
 		x = (i % 64);
 		y = (i / 64);
 		background = getBackground(cursor[x][y], kit->procs->arena[1][i]);
-		foreground = getForeground(cursor[x][y], kit->procs->arena[1][i]);
 		x = x + (19 * x) - (WIDTH / 2);
 		y = y - (21 * y) + (HEIGHT / 2);
 		rectangle(x, y, x + 19, y - 19, background);
@@ -73,7 +63,7 @@ void		drawing(t_dlist *node)
 		{
 			sprintf(hex, "%02X", kit->procs->arena[0][i]);
 			hex[2] = 0;
-			renderBitmapString(x + 2, y - 14, hex, foreground);
+			renderBitmapString(x + 2, y - 14, hex);
 		}
 	}
 }

@@ -12,17 +12,10 @@
 
 #include <visualizer.h>
 
-void	renderBitmapString(float x, float y, char *str, int foreground) {
+void	renderBitmapString(float x, float y, char *str) {
 	int		i;
-	float colors[5][3] = {
-		{0, 0, 0},
-		{0.262745098f, 0.380392157f, 0.933333333f},
-		{0.988235294f, 0.639215686f, 0.0666666667f},
-		{0.709803922f, 0.0901960784f, 0.619607843f},
-		{0.929411765f, 0.862745098f, 0.823529412f},
-	};
 
-	glColor3f(colors[foreground][0], colors[foreground][1], colors[foreground][2]);
+	glColor3f(0, 0, 0);
 	glRasterPos2f(x, y);
 	i = -1;
 	while (str[++i])
