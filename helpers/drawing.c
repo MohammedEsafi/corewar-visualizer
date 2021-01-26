@@ -116,6 +116,16 @@ static void	getPercent(int percent[4], int playerId)
 		percent[playerId - 1] += 1;
 }
 
+static void	winner(t_kit *kit)
+{
+	char	buffer[500];
+	int		i;
+
+	i = 410 - (kit->bloc->players_counter * 120) - 70;
+	sprintf(buffer, "\"%s\", has won !", "Norman");
+	renderBitmapString(470, i, buffer, 1, GLUT_BITMAP_9_BY_15);
+}
+
 void		drawing(t_dlist *node)
 {
 	int		i;
@@ -149,5 +159,7 @@ void		drawing(t_dlist *node)
 	}
 	putInformation(kit, processesAlive);
 	progressBar(kit, percent);
+	if (1)
+		winner(kit);
 	keysUsage();
 }
