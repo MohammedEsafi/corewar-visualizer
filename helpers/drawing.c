@@ -37,6 +37,85 @@ static int	getBackground(char cursor, int playerId)
 		return (playerId);
 }
 
+static int	putInformation(t_kit *kit, int processesAlive)
+{
+	char	buffer[500];
+	int		i;
+	int		padding;
+
+	sprintf(buffer, "Total cycle :                %zu", kit->game_params->total_cycles_counter);
+	renderBitmapString(470, 590, buffer, 1, GLUT_BITMAP_9_BY_15);
+	sprintf(buffer, "Cycle to die :               %d", kit->game_params->cycles_to_die);
+	renderBitmapString(470, 550, buffer, 1, GLUT_BITMAP_9_BY_15);
+	sprintf(buffer, "Live counter :               %zu", kit->game_params->live_counter);
+	renderBitmapString(470, 510, buffer, 1, GLUT_BITMAP_9_BY_15);
+	sprintf(buffer, "Processes slive :            %d", processesAlive);
+	renderBitmapString(470, 470, buffer, 1, GLUT_BITMAP_9_BY_15);
+
+	i = -1;
+	while (++i < kit->bloc->players_counter)
+	{
+		padding = i * 100;
+
+		sprintf(buffer, "Player %d :", -i - 1);
+		renderBitmapString(470, 390 - padding, buffer, 1, GLUT_BITMAP_9_BY_15);
+
+		sprintf(buffer, "%s", kit->bloc->players->header.prog_name);
+		renderBitmapString(580, 390 - padding, buffer, 2 + i, GLUT_BITMAP_9_BY_15);
+
+		sprintf(buffer, "%s", kit->bloc->players->header.prog_name);
+		renderBitmapString(580, 390 - padding, buffer, 2 + i, GLUT_BITMAP_9_BY_15);
+
+		sprintf(buffer, "Last live :                   %d", 555);
+		renderBitmapString(490, 390 - 30 - padding, buffer, 1, GLUT_BITMAP_9_BY_15);
+
+		sprintf(buffer, "Lives in current period :     %d", 555);
+		renderBitmapString(490, 390 - 60 - padding, buffer, 1, GLUT_BITMAP_9_BY_15);
+	}
+	return (i);
+}
+
+static void	keysUsage()
+{
+	char	buffer[500];
+
+	sprintf(buffer, "Start/Pause : 'SPACE'");
+	renderBitmapString(470, -470, buffer, 1, GLUT_BITMAP_9_BY_15);
+	sprintf(buffer, "Exit : 'ESC'");
+	renderBitmapString(470, -510, buffer, 1, GLUT_BITMAP_9_BY_15);
+	sprintf(buffer, "Step Up: 'arrow up / right'");
+	renderBitmapString(470, -550, buffer, 1, GLUT_BITMAP_9_BY_15);
+	sprintf(buffer, "Step Down: 'arrow down / left'");
+	renderBitmapString(470, -590, buffer, 1, GLUT_BITMAP_9_BY_15);
+}
+
+static void	progressBar(t_kit *kit, int percent[4])
+{
+	int		i;
+	int		result;
+	int		indexes[2] = {0};
+
+	i = -1;
+	result = 0;
+	while (++i < kit->bloc->players_counter)
+		result += percent[i];
+	i = -1;
+	while (++i < kit->bloc->players_counter)
+	{
+		if (indexes[0] == 0)
+			indexes[0] = 460;
+		indexes[1] = 410 - (kit->bloc->players_counter * 120);
+		rectangle(indexes[0], indexes[1], indexes[0] + percent[i] * 350 / result, indexes[1] + 20, i + 1);
+		indexes[0] += percent[i] * 350 / result;
+	}
+}
+
+static void	getPercent(int percent[4], int playerId)
+{
+	if (playerId > 0 && playerId < 5)
+		percent[playerId - 1] += 1;
+}
+
 void		drawing(t_dlist *node)
 {
 	int		i;
@@ -44,6 +123,7 @@ void		drawing(t_dlist *node)
 	int		y;
 	t_kit	*kit;
 	char	hex[3];
+	int		percent[4] = {0};
 	char	cursor[64][64] = {0};
 	int		processesAlive = 0;
 	int		background;
@@ -56,6 +136,7 @@ void		drawing(t_dlist *node)
 		x = (i % 64);
 		y = (i / 64);
 		background = getBackground(cursor[x][y], kit->procs->arena[1][i]);
+		getPercent(percent, kit->procs->arena[1][i]);
 		x = x + (19 * x) - (WIDTH / 2);
 		y = y - (21 * y) + (HEIGHT / 2);
 		rectangle(x, y, x + 19, y - 19, background);
@@ -63,7 +144,10 @@ void		drawing(t_dlist *node)
 		{
 			sprintf(hex, "%02X", kit->procs->arena[0][i]);
 			hex[2] = 0;
-			renderBitmapString(x + 2, y - 14, hex);
+			renderBitmapString(x + 2, y - 14, hex, 0, GLUT_BITMAP_HELVETICA_12);
 		}
 	}
+	putInformation(kit, processesAlive);
+	progressBar(kit, percent);
+	keysUsage();
 }

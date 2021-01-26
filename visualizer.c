@@ -14,7 +14,7 @@
 
 t_deque		*datum = NULL;
 t_dlist		*node = NULL;
-static int	carry = 1;
+static int	carry = 0;
 
 static void		initGL(void)
 {
@@ -61,7 +61,7 @@ static void		specialInput(int key, int x, int y)
 			exit(0);
 			break ;
 		case 32:
-			carry = 1;
+			carry = !carry;
 			glutTimerFunc(0, timer, 0);
 			break ;
 		case GLUT_KEY_UP:

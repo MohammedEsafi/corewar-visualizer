@@ -19,7 +19,7 @@
 # define VISUALIZER_H
 
 # define MEM_SIZE 4096
-# define WIDTH 1793
+# define WIDTH 1710
 # define HEIGHT 1282
 
 /*
@@ -40,6 +40,6 @@
 void	visualizer(t_deque *deque);
 void	drawing(t_dlist *node);
 void	rectangle(int x1, int y1, int x2, int y2, int background);
-void	renderBitmapString(float x, float y, char *str);
+void	renderBitmapString(float x, float y, char *str, int foreground, void *font);
 
 #endif
