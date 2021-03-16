@@ -6,11 +6,11 @@
 /*   By: mesafi <mesafi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 10:25:27 by mesafi            #+#    #+#             */
-/*   Updated: 2020/12/07 10:25:29 by mesafi           ###   ########.fr       */
+/*   Updated: 2021/02/17 11:29:37 by mzaboub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <visualizer.h>
+#include "visualizer.h"
 
 t_deque		*datum = NULL;
 t_dlist		*node = NULL;
@@ -32,7 +32,7 @@ void			display(void)
 static void		goNext()
 {
 	carry = 0;
-	if (!(node = node->next))
+	if (!node || !(node = node->next))
 		return ;
 	glutPostRedisplay();
 }
@@ -40,14 +40,14 @@ static void		goNext()
 static void		goPrevious()
 {
 	carry = 0;
-	if (!(node = node->prev))
+	if (!node || !(node = node->prev))
 		return ;
 	glutPostRedisplay();
 }
 
 static void		timer(int data)
 {
-	if (!carry || !(node = node->next))
+	if (!node || (!carry || !(node = node->next)))
 		return ;
 	glutPostRedisplay();
 	glutTimerFunc(0, timer, 0);

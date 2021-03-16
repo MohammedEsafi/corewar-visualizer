@@ -6,11 +6,11 @@
 /*   By: mesafi <mesafi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 12:46:01 by mesafi            #+#    #+#             */
-/*   Updated: 2021/01/25 12:46:02 by mesafi           ###   ########.fr       */
+/*   Updated: 2021/02/03 15:27:32 by mzaboub          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <visualizer.h>
+#include "visualizer.h"
 
 static int newCursor = 6;
 static int oldCursor = 5;
@@ -22,8 +22,8 @@ static void	filler(t_kit *kit, char cursor[64][64], int *processesAlive)
 	node = kit->procs;
 	while (node != NULL)
 	{
-		cursor[(node->pc - 1) % 64][(node->pc - 1) / 64] = newCursor;
-		cursor[(node->op_pc - 1) % 64][(node->op_pc - 1) / 64] = oldCursor;
+		cursor[(node->op_pc) % 64][(node->op_pc) / 64] = newCursor;
+		// cursor[(node->op_pc - 1) % 64][(node->op_pc - 1) / 64] = oldCursor;
 		node = node->next;
 		*processesAlive += 1;
 	}
@@ -42,12 +42,19 @@ static int	putInformation(t_kit *kit, int processesAlive)
 	char	buffer[500];
 	int		i;
 	int		padding;
+	int		live_counter;
 
-	sprintf(buffer, "Total cycle :                %zu", kit->game_params->total_cycles_counter);
+	i = -1;
+	live_counter = 0;
+	while (++i < kit->bloc->players_counter)
+	{
+		live_counter += kit->live[i][0];
+	}
+	sprintf(buffer, "Total cycle :                %d", kit->game_params->total_cycles_counter);
 	renderBitmapString(470, 590, buffer, 1, GLUT_BITMAP_9_BY_15);
 	sprintf(buffer, "Cycle to die :               %d", kit->game_params->cycles_to_die);
 	renderBitmapString(470, 550, buffer, 1, GLUT_BITMAP_9_BY_15);
-	sprintf(buffer, "Live counter :               %zu", kit->game_params->live_counter);
+	sprintf(buffer, "Live counter :               %d", live_counter);
 	renderBitmapString(470, 510, buffer, 1, GLUT_BITMAP_9_BY_15);
 	sprintf(buffer, "Processes slive :            %d", processesAlive);
 	renderBitmapString(470, 470, buffer, 1, GLUT_BITMAP_9_BY_15);
@@ -60,16 +67,13 @@ static int	putInformation(t_kit *kit, int processesAlive)
 		sprintf(buffer, "Player %d :", -i - 1);
 		renderBitmapString(470, 390 - padding, buffer, 1, GLUT_BITMAP_9_BY_15);
 
-		sprintf(buffer, "%s", kit->bloc->players->header.prog_name);
+		sprintf(buffer, "%s", kit->bloc->players[i].header.prog_name);
 		renderBitmapString(580, 390 - padding, buffer, 2 + i, GLUT_BITMAP_9_BY_15);
 
-		sprintf(buffer, "%s", kit->bloc->players->header.prog_name);
-		renderBitmapString(580, 390 - padding, buffer, 2 + i, GLUT_BITMAP_9_BY_15);
-
-		sprintf(buffer, "Last live :                   %d", 555);
+		sprintf(buffer, "Last live :                   %d", kit->live[i][1]);
 		renderBitmapString(490, 390 - 30 - padding, buffer, 1, GLUT_BITMAP_9_BY_15);
 
-		sprintf(buffer, "Lives in current period :     %d", 555);
+		sprintf(buffer, "Lives in current period :     %d", kit->live[i][0]);
 		renderBitmapString(490, 390 - 60 - padding, buffer, 1, GLUT_BITMAP_9_BY_15);
 	}
 	return (i);
@@ -122,7 +126,7 @@ static void	winner(t_kit *kit)
 	int		i;
 
 	i = 410 - (kit->bloc->players_counter * 120) - 70;
-	sprintf(buffer, "\"%s\", has won !", "Norman");
+	sprintf(buffer, "\"%s\", has won !", kit->bloc->players[kit->last_live - 1].header.prog_name);
 	renderBitmapString(470, i, buffer, 1, GLUT_BITMAP_9_BY_15);
 }
 
@@ -145,8 +149,9 @@ void		drawing(t_dlist *node)
 	{
 		x = (i % 64);
 		y = (i / 64);
-		background = getBackground(cursor[x][y], kit->procs->arena[1][i]);
-		getPercent(percent, kit->procs->arena[1][i]);
+		background = getBackground(cursor[x][y], kit->procs->arena[1][i] == 0 \
+			? kit->procs->arena[1][i] : (kit->procs->arena[1][i] - 1) ^ 0xFF);
+		getPercent(percent, (kit->procs->arena[1][i] - 1) ^ 0xFF);
 		x = x + (19 * x) - (WIDTH / 2);
 		y = y - (21 * y) + (HEIGHT / 2);
 		rectangle(x, y, x + 19, y - 19, background);
@@ -159,7 +164,7 @@ void		drawing(t_dlist *node)
 	}
 	putInformation(kit, processesAlive);
 	progressBar(kit, percent);
-	if (1)
+	if (!node->next && !kit->last_live)
 		winner(kit);
 	keysUsage();
 }
